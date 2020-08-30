@@ -1,0 +1,66 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+android {
+    compileSdkVersion SDK.compileSdk
+
+    defaultConfig {
+        minSdkVersion SDK.minSdk
+        targetSdkVersion SDK.targetSdk
+        versionCode Releases.versionCode
+        versionName Releases.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    compileOptions {
+        sourceCompatibility = Java.jvmTarget
+        targetCompatibility = Java.jvmTarget
+    }
+
+    kotlinOptions {
+        jvmTarget = Java.jvmTarget.toString()
+    }
+
+    buildTypes {
+        release {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+            testLogging {
+                exceptionFormat "full"
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+            }
+        }
+    }
+
+    sourceSets.test.resources.srcDirs += ["src/test/assets"]
+}
+
+dependencies {
+    implementation KotlinLibraries.coroutines
+    implementation KotlinLibraries.stdLibJDK7
+    implementation AndroidXLibraries.lifecycleRuntime
+    implementation AndroidXLibraries.exifInterface
+    implementation Libraries.material
+    implementation Libraries.timberLog
+    implementation Libraries.crashlyticsSDK
+
+    testImplementation TestLibraries.junit5API
+    testRuntimeOnly TestLibraries.junit5Engine
+    testImplementation TestLibraries.junit5Params
+    testImplementation TestLibraries.mockk
+    testImplementation TestLibraries.androidArchCoreTesting
+    testImplementation TestLibraries.coroutines
+    testImplementation TestLibraries.mockwebserver
+
+    androidTestImplementation TestLibraries.testRunner
+    androidTestImplementation TestLibraries.espresso
+}
